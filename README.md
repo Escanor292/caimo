@@ -120,3 +120,27 @@ Thư mục `.agents/skills/ai-text-detection/` chứa công cụ kiểm toán v�
   ```bash
   python .agents/skills/ai-text-detection/scripts/humanize_text.py "Đoạn văn bản cần làm sạch..."
   ```
+
+
+---
+
+## 6. CÔNG CỤ VẼ SƠ ĐỒ, BIỂU ĐỒ KHOA HỌC & LÀM SLIDE (ACADEMIC REPORT & SLIDES)
+
+Thư mục `.agents/skills/academic-report-and-slides/` cung cấp bộ công cụ tự động hóa toàn diện cho báo cáo học thuật:
+
+* **Vẽ biểu đồ khoa học chuẩn IEEE / Nature (300 DPI):**
+  ```bash
+  python .agents/skills/academic-report-and-slides/scripts/make_ieee_plot.py --output "my_chart.png"
+  ```
+* **Tự động tạo khung báo cáo Word chuẩn trường đại học (.docx):**
+  ```bash
+  python .agents/skills/academic-report-and-slides/scripts/build_academic_doc.py --output "BaoCao_Moi.docx"
+  ```
+* **Tự động tạo bộ Slide thuyết trình 16:9 (.pptx):**
+  ```bash
+  python .agents/skills/academic-report-and-slides/scripts/build_deck_pptx.py --output "Slide_Moi.pptx"
+  ```
+* **Biên dịch sơ đồ Mermaid sang ảnh PNG độ nét cao:**
+  ```bash
+  python .agents/skills/academic-report-and-slides/scripts/render_mermaid.py "flowchart TD; A-->B;" -o "diagram.png"
+  ```
