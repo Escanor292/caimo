@@ -1,79 +1,88 @@
 # Academic Humanizer & Anti-AI Detection Rules
-## Quy tắc Viết & Chuốt Văn phong Học thuật Tránh Máy quét AI (Turnitin, GPTZero, Desklib)
+## Cẩm nang Tối ưu Văn phong Học thuật & Xóa Dấu vết AI (Turnitin, GPTZero, Desklib)
+### Tích hợp tinh hoa từ DIPPER, Proselint, Write-Good, Parrot & GPT_Academic
 
-Tài liệu này tổng hợp toàn bộ các nguyên tắc cơ học, từ vựng và cấu trúc ngữ pháp giúp văn bản học thuật (báo cáo, tiểu luận, luận văn, nghiên cứu) giữ vững tính trang trọng nhưng mang dấu ấn tư duy con người, triệt tiêu các đặc trưng thống kê mà các bộ quét AI (Turnitin AI Detection, GPTZero, Desklib DeBERTa, CopyLeaks) sử dụng để gắn cờ.
-
----
-
-## I. CƠ CHẾ BẮT BÀI CỦA CÁC BỘ QUÉT AI
-
-Các bộ quét AI không "hiểu" nội dung; chúng đo lường **3 chỉ số thống kê xác suất**:
-
-1. **Perplexity (Độ ngạc nhiên của từ vựng):**
-   * *AI:* Luôn chọn từ có xác suất xuất hiện cao nhất tiếp theo trong ngữ cảnh (đường đi an toàn, dễ đoán).
-   * *Người thật:* Dùng từ vựng chuyên ngành chính xác, các động từ hành động cụ thể, thỉnh thoảng dùng quán ngữ tự nhiên hoặc cách diễn đạt phi tuyến tính.
-2. **Burstiness (Độ biến thiên nhịp điệu / chiều dài câu):**
-   * *AI:* Các câu có chiều dài rất đồng đều (trung bình 15–22 từ/câu, độ lệch chuẩn rất thấp, $\text{Burstiness} < 0.35$).
-   * *Người thật:* Nhịp điệu lúc dồn dập, lúc trầm lắng (câu 5 từ xen kẽ câu phức 35 từ có mệnh đề phụ, $\text{Burstiness} > 0.45$).
-3. **Tính đối xứng và cấu trúc đoạn rập khuôn:**
-   * *AI:* Mỗi đoạn luôn đúng 3–4 câu: 1 câu chủ đề $\rightarrow$ 2 câu giải thích $\rightarrow$ 1 câu tóm tắt/triết lý; các gạch đầu dòng luôn có độ dài tương đương nhau.
+Tài liệu này tổng hợp các kỹ thuật cơ học, từ vựng và cấu trúc ngữ pháp học thuật rút ra từ các nghiên cứu và công cụ mã nguồn mở hàng đầu thế giới (DIPPER - AllenAI, Proselint, write-good, Parrot Paraphraser, GPT_Academic, Fabric).
 
 ---
 
-## II. DANH SÁCH TỪ VỰNG VÀ CẤU TRÚC BỊ CẤM TUYỆT ĐỐI (RED FLAGS)
+## I. BA NGUYÊN TẮC PARAPHRASE HỌC THUẬT (THE PARROT TRIAD)
 
-### 1. Tiếng Việt (Bắt buộc loại bỏ 100%)
+Khi viết lại câu văn để xóa dấu vết máy viết, luôn đảm bảo cân bằng 3 trục của **Parrot Paraphraser**:
+1. **Adequacy (Bảo toàn ý nghĩa):** Tuyệt đối không thay đổi sự thật khoa học, số liệu thực nghiệm hoặc kết luận cốt lõi.
+2. **Fluency (Trôi chảy ngữ pháp):** Câu từ tự nhiên, mạch lạc, không dùng từ điển đồng nghĩa một cách gượng ép (tránh "thesaurus replacement" thô thiển).
+3. **Diversity (Độ sai khác cấu trúc):** Thay đổi căn bản hình thái ngữ pháp (đổi thể chủ động/bị động, tách câu, gộp câu, đảo trật tự mệnh đề).
 
-| Mẫu câu AI rập khuôn (CẤM) | Cách người thật diễn đạt thay thế |
+---
+
+## II. KỸ THUẬT DIPPER (DISCOURSE PARAPHRASING)
+
+Nghiên cứu của AllenAI & UMass (Krishna et al.) chứng minh rằng việc chỉ thay thế từ vựng đơn lẻ vẫn bị các bộ phân loại RoBERTa/DeBERTa bắt được. Muốn phá vỡ mô hình phân loại, ta phải kiểm soát 2 thông số:
+
+### 1. Lexical Diversity (Độ biến thiên từ vựng):
+* Thay thế các từ vựng mang tính khái quát cao bằng các thuật ngữ định danh hẹp và chính xác hơn.
+* Thay vì viết: *"Mô hình phân loại dữ liệu rất tốt"* $\rightarrow$ Viết: *"Thuật toán Random Forest hội tụ nhanh trên 21 thuộc tính đo lường tim thai"*.
+
+### 2. Order Diversity (Đảo trật tự mệnh đề & liên kết diễn ngôn):
+* **Đảo mệnh đề phụ lên đầu câu (Fronted Dependent Clauses):**
+  * *Bản AI gốc:* *"Random Forest đạt kết quả tốt nhất vì nó có khả năng xử lý các thuộc tính phi tuyến tính hiệu quả."*
+  * *Bản DIPPER đảo:* *"Nhờ năng lực phân tách các thuộc tính phi tuyến tính phức tạp, Random Forest vượt trội hoàn toàn so với mô hình hồi quy tuyến tính cổ điển."*
+* **Tách câu ghép thành cặp câu ngắn - dài tương phản:**
+  * *Bản AI gốc:* *"Mô hình có độ chính xác 95% nhưng vẫn còn nhầm lẫn giữa lớp 2 và lớp 3 do sự chồng lấn phân phối của chỉ số ASTV."*
+  * *Bản DIPPER tái cấu trúc:* *"Mô hình đạt độ chính xác 95%. Tuy vậy, hiện tượng chồng lấn chỉ số ASTV tại các ngưỡng cận biên vẫn dẫn đến sai lệch đáng kể giữa nhóm nghi ngờ và nhóm bệnh lý thực sự."*
+
+---
+
+## III. BỘ QUY TẮC PROSELINT & WRITE-GOOD (CHỮA BỆNH VĂN PHONG AI)
+
+### 1. Triệt tiêu "Bệnh danh từ hóa" (Nominalization / Zombie Nouns)
+AI rất thích biến các động từ mạnh thành các cụm danh từ cồng kềnh, làm câu văn chết lặng và mang đậm "mùi máy":
+
+| Cụm danh từ AI rườm rà (CẤM) | Động từ hành động của con người |
 | :--- | :--- |
-| *"Trong bối cảnh hiện nay / Trong kỷ nguyên số 4.0..."* | Vào thẳng vấn đề: *"Khi khối lượng hồ sơ bệnh án số hóa tăng nhanh..."* |
-| *"Không thể phủ nhận rằng..."* | *"Thực nghiệm cho thấy..."* hoặc đưa số liệu trực tiếp. |
-| *"Đóng vai trò vô cùng quan trọng / then chốt / không thể thiếu..."* | Nêu rõ tác dụng cụ thể: *"Giúp rút ngắn 40% thời gian hội chẩn..."* |
-| *"Như chúng ta đã biết..."* | Bỏ hẳn cụm này, bắt đầu trực tiếp bằng luận điểm. |
-| *"Tóm lại, việc... là một bước tiến mang tính đột phá..."* | Nêu kết luận định lượng: *"Kết quả trên khẳng định mô hình đủ độ tin cậy để..."* |
-| *"Mặt khác,... Bên cạnh đó,... Hơn nữa,..."* (đầu mỗi câu) | Thay bằng liên kết ngữ nghĩa: *"Tuy nhiên,", "Đáng lưu ý là,", "Ngược lại,"*. |
-| 3 gạch đầu dòng có cấu trúc ngữ pháp và độ dài y hệt nhau | Viết thành đoạn văn liên tục hoặc để độ dài các ý tự nhiên theo độ phức tạp. |
+| *tiến hành thực hiện việc phân tích* | **phân tích** |
+| *đưa ra kết luận khẳng định* | **kết luận** |
+| *tiến hành quá trình tối ưu hóa* | **tối ưu hóa** |
+| *make an examination of* | **examine / analyze** |
+| *conduct an investigation into* | **investigate** |
+| *perform a demonstration of* | **demonstrate / show** |
+| *take into consideration* | **consider** |
 
-### 2. Tiếng Anh (Bắt buộc loại bỏ 100%)
+### 2. Cắt bỏ "Từ thoái thác & Hư từ đệm" (Weasel Words & Padding)
+Các từ thừa thãi khiến câu văn dài dòng mà không đem lại giá trị học thuật:
+* **Tiếng Việt cần loại bỏ:** *rất, vô cùng, cực kỳ, tương đối, nhìn chung thì, trên thực tế thì, rõ ràng là, hiển nhiên là, có thể nói rằng*.
+* **Tiếng Anh cần loại bỏ:** *extremely, fairly, remarkably, quite, clearly, obviously, virtually, essentially, in a sense, in terms of, it goes without saying that*.
 
-| AI Red-Flag Words & Phrases (BANNED) | Human Academic Alternatives |
-| :--- | :--- |
-| **delve / delve into** | investigate, examine, inspect, analyze, assess |
-| **tapestry / rich tapestry** | complex framework, system, interplay, domain |
-| **testament / stands as a testament** | evidence, demonstration, indicates, confirms |
-| **underscore / underline** | emphasize, highlight, show, reveal |
-| **pivotal / crucial / paramount** | critical, key, necessary, fundamental, significant |
-| **intricate / nuances** | detailed, specific mechanisms, complexities |
-| **foster / harness / embark** | promote, develop, apply, initiate, employ |
-| **furthermore / moreover** (used repeatedly) | additionally, in turn, consequently, notably, however |
-| **beacon / realm / overarching** | benchmark, field, context, general, primary |
-| **"In today's fast-paced world..."** | Directly cite the problem: *"Modern clinical settings require..."* |
-| **"It is important to remember that..."** | Cut the fluff: *"Note that..."* or state the fact directly. |
-| **"A double-edged sword"** | State the specific trade-off: *"While accuracy improves, latency increases by 15%."* |
+### 3. Kiểm soát "Thể bị động quá mức" (Excessive Passive Voice)
+* AI thường lạm dụng câu bị động để nghe có vẻ khách quan (*"It was observed that..."*, *"Việc xử lý dữ liệu được thực hiện bởi..."*).
+* **Quy tắc:** Giữ tỷ lệ câu bị động dưới **25%**. Dùng thể chủ động có danh xưng học thuật tự nhiên (*"Chúng tôi áp dụng mô hình..."*, *"Thực nghiệm chứng minh rằng..."*).
 
 ---
 
-## III. KỸ THUẬT NÂNG CAO BURSTINESS (TRỘN NHỊP CÂU)
+## IV. BẢNG TỪ VỰNG BỊ CẤM TOÀN DIỆN (COMPREHENSIVE BANNED LIST)
 
-Để vượt qua các thuật toán đo độ cong xác suất (Fast-DetectGPT, GPTZero), bài viết **bắt buộc phải tuân thủ quy tắc 3 tầng nhịp điệu (3-Tier Length Pattern)**:
+### 1. Tiếng Việt (Cấm 100% khi viết học thuật)
+* **Cụm mở bài sáo rỗng:** *"Trong bối cảnh hiện nay / kỷ nguyên số 4.0...", "Không thể phủ nhận rằng...", "Như chúng ta đã biết...", "Từ xa xưa đến nay...", "Tóm lại, việc..."*.
+* **Cụm ca ngợi sáo rỗng:** *"Đóng vai trò vô cùng quan trọng / then chốt / không thể thiếu...", "Là một bước tiến mang tính đột phá...", "Mở ra một chương mới..."*.
+* **Cụm liệt kê đối xứng:** 3 gạch đầu dòng có cấu trúc ngữ pháp và độ dài y hệt nhau.
 
-1. **Tầng 1 - Câu ngắn dứt khoát (Punchy Short: 4–9 từ):**
-   * Dùng để chốt luận điểm, nêu câu hỏi hoặc tạo điểm nhấn.
-   * *Ví dụ:* *"Sai số này là không thể chấp nhận."* hoặc *"The baseline model failed."*
-2. **Tầng 2 - Câu phức phân tích sâu (Compound / Complex: 28–42 từ):**
-   * Chứa mệnh đề phụ, quan hệ nhân quả, điều kiện ràng buộc hoặc dấu chấm phẩy (`;`).
-   * *Ví dụ:* *"Mặc dù Random Forest đạt độ chính xác 95% trên tập kiểm tra, việc thiếu hụt dữ liệu ở nhóm bệnh lý nhóm 3 khiến độ nhạy giảm rõ rệt; điều này đòi hỏi các bác sĩ lâm sàng phải can thiệp trực tiếp thay vì chỉ dựa vào dự đoán tự động."*
-3. **Tầng 3 - Câu chức năng thông thường (Moderate: 12–18 từ):**
-   * Dẫn dắt thông tin hoặc trình bày phương pháp thực nghiệm.
-
-> **Quy tắc vàng:** Không bao giờ để 3 câu liên tiếp có số lượng từ xấp xỉ nhau (chênh lệch dưới 4 từ).
+### 2. Tiếng Anh (Cấm 100% - Tránh gắn cờ Turnitin / GPTZero)
+* **Verbs:** *delve, underscore, foster, harness, embark, bolster, resonate, navigate, elucidate*.
+* **Nouns & Adjectives:** *tapestry, testament, pivotal, intricate, crucial, paramount, beacon, realm, multifaceted, myriad, unprecedented, quintessential*.
+* **Transitions:** *Furthermore, Moreover, In conclusion, It is important to note that, A double-edged sword, In today's fast-paced world*.
 
 ---
 
-## IV. NÂNG CAO TÍNH HỌC THUẬT (AUTHENTIC ACADEMIC STANCE)
+## V. CÁC SYSTEM PROMPTS MẪU TỪ FABRIC & GPT_ACADEMIC
 
-1. **Tính cụ thể hóa (Specific Grounding):** Thay thế mọi tính từ chung chung bằng số liệu hoặc tên định danh thực tế (tên biến, ngưỡng đo, chỉ số phần trăm).
-2. **Thái độ phản biện (Critical Hedging):** Người viết nghiên cứu thật luôn chỉ ra giới hạn của phương pháp:
-   * Tránh tuyệt đối: *"Phương pháp này hoàn hảo và giải quyết triệt để vấn đề."* (Giọng điệu AI)
-   * Viết chuẩn: *"Mặc dù kết quả cho thấy mức cải thiện 3.2% F1-score, phương pháp vẫn còn nhạy cảm với nhiễu tại các phân vị cực trị."* (Giọng điệu học giả)
-3. **Đa dạng hóa dấu câu:** Tự nhiên sử dụng dấu gạch ngang giải thích (`—`), dấu ngoặc đơn chú thích `(...)`, dấu hai chấm `:` và dấu chấm phẩy `;`.
+Khi hướng dẫn AI viết bài, sử dụng các chỉ thị sau để khóa chặt văn phong:
+
+```text
+[Direct Academic Persona]
+You are a rigorous, senior peer reviewer and academic researcher. 
+Write with intellectual density, surgical precision, and natural syntactic variance:
+- Never use generic introductory throat-clearing ("In this modern era...", "It is important to remember...").
+- Alternate cadence using a 3-tier structure: short assertive claims (4-8 words), dense analytical arguments (28-40 words with semicolons/dashes), and empirical observations (12-18 words).
+- Eliminate nominalizations: use direct, active transitive verbs.
+- Ground all arguments in concrete parameters, quantitative thresholds, or trade-off analysis.
+```
