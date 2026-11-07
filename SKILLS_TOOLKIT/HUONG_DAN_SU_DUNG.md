@@ -84,3 +84,4 @@ Tự động dựng slide thuyết trình chuyên nghiệp:
 python SKILLS_TOOLKIT/02_Academic_Report_and_Slides/scripts/build_deck_pptx.py --output "Slide_Mau_Moi.pptx"
 ```
 *(Mở file `Slide_Mau_Moi.pptx` lên xem: Đã có slide bìa màu xanh Navy sang trọng, lộ trình trình bày 5 mục, bảng kết quả số liệu).*
+
