@@ -9,6 +9,7 @@ import os
 import subprocess
 import argparse
 import tempfile
+import shutil
 
 DEFAULT_MERMAID = """flowchart TD
     A["Raw CTG Data"] --> B["Preprocessing & Scaling"]
@@ -24,15 +25,17 @@ def render_mermaid(mmd_content: str, output_path: str = "diagram.png", scale: in
         temp_input = f.name
 
     try:
+        # Detect npx executable name on Windows
+        npx_cmd = shutil.which("npx") or "npx"
         cmd = [
-            "npx", "--yes", "-p", "@mermaid-js/mermaid-cli", "mmdc",
+            npx_cmd, "--yes", "-p", "@mermaid-js/mermaid-cli", "mmdc",
             "-i", temp_input,
             "-o", output_path,
-            "-b", "transparent",
+            "-b", "white",
             "-s", str(scale)
         ]
         print(f"[*] Compiling Mermaid diagram to {output_path} (Scale {scale}x)...")
-        res = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        res = subprocess.run(cmd, capture_output=True, text=True, check=True, shell=(os.name == 'nt'))
         print(f"[+] Successfully rendered diagram: {output_path}")
         return True
     except subprocess.CalledProcessError as e:
