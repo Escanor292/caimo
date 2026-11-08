@@ -166,12 +166,28 @@ def audit_academic_text(text: str):
     }
 
 def main():
-    if len(sys.argv) > 1:
-        text = " ".join(sys.argv[1:])
+    text = ""
+    if "--file" in sys.argv:
+        idx = sys.argv.index("--file")
+        if idx + 1 < len(sys.argv):
+            file_path = sys.argv[idx + 1]
+            if os.path.exists(file_path):
+                with open(file_path, "r", encoding="utf-8") as f:
+                    text = f.read()
+            else:
+                print(f"Error: File not found: {file_path}")
+                sys.exit(1)
+    elif len(sys.argv) > 1 and (sys.argv[1].endswith(".txt") or sys.argv[1].endswith(".md")) and os.path.exists(sys.argv[1]):
+        with open(sys.argv[1], "r", encoding="utf-8") as f:
+            text = f.read()
+    elif len(sys.argv) > 1:
+        # Filter out flags like --lang
+        args = [a for a in sys.argv[1:] if not a.startswith("--")]
+        text = " ".join(args)
     elif not sys.stdin.isatty():
         text = sys.stdin.read().strip()
     else:
-        print("Usage: python text_stats.py 'Academic text to audit...'")
+        print("Usage: python text_stats.py 'Academic text to audit...' OR python text_stats.py --file path/to/file.txt")
         sys.exit(1)
 
     rep = audit_academic_text(text)

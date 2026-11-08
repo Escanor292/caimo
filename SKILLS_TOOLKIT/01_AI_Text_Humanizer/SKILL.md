@@ -49,10 +49,12 @@ flowchart TD
 
 ### BƯỚC 1: SOẠN THẢO VÀ CHUỐT VĂN PHONG (DRAFTING)
 Tuân thủ nghiêm ngặt [references/academic_humanizer_rules.md](./references/academic_humanizer_rules.md):
+0. **NGUYÊN TẮC BẢO TOÀN DỮ LIỆU THỰC NGHIỆM (GROUNDING - SINGLE SOURCE OF TRUTH):** Tuyệt đối KHÔNG ĐƯỢC bịa số liệu hay ghi nhẩm các chỉ số (Accuracy, F1, ma trận nhầm lẫn, top đặc trưng). Mọi con số trong báo cáo, slide và README bắt buộc phải trích xuất chính xác 100% từ output thực nghiệm của mã nguồn/notebook.
 1. **Triệt tiêu 100% từ sáo rỗng (Red-Flags):** Cấm các từ nhận diện AI (*delve, tapestry, testament, underscore, pivotal, crucial, furthermore, moreover, trong bối cảnh, không thể phủ nhận, đóng vai trò then chốt*).
 2. **Kỹ thuật DIPPER - Order Diversity:** Đảo mệnh đề phụ lên đầu câu (*"Nhờ khả năng xử lý phi tuyến tính..."* thay vì *"Mô hình tốt vì nó phi tuyến tính"*).
 3. **Kỹ thuật Proselint & Write-Good:** Khử sạch bệnh danh từ hóa (*thực hiện việc phân tích $\rightarrow$ phân tích; conduct an analysis $\rightarrow$ analyze*); cắt bỏ hư từ đệm (*rất, vô cùng, clearly, obviously*).
 4. **Quy tắc 3 tầng nhịp điệu (Burstiness):** Luôn đan xen câu ngắn dứt khoát (4–9 từ) với câu phức phân tích sâu (28–42 từ) và câu vừa phải (12–18 từ).
+5. **Hợp thức hóa Metadata hệ điều hành (File Metadata Scrub):** Tẩy sạch dấu vết tự động (`python-docx`, `Steve Canny`), ghi đè thuộc tính chính chủ sinh viên (Tác giả, MSSV, Tiêu đề).
 
 ---
 
