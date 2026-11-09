@@ -114,9 +114,9 @@ if os.path.exists(pptx_path):
     s3_txt = " ".join([sh.text for sh in prs.slides[2].shapes if sh.has_text_frame])
     s14_txt = " ".join([sh.text for sh in prs.slides[13].shapes if sh.has_text_frame])
     s3_ok = ("19%" not in s3_txt) and ("20%" in s3_txt)
-    s14_ok = ("Cùng Acc" not in s14_txt) and ("BFS đạt Acc" in s14_txt)
+    s14_ok = ("Cùng Acc" not in s14_txt) and ("BFS đạt Acc" in s14_txt) and ("91.57%" in s14_txt) and ("86.93%" in s14_txt) and ("16 Cấu Hình" in s14_txt or "16 cấu hình" in s14_txt)
     print(f"     + Slide 3 Tỉ lệ Test = 20% (không lỗi 19%): {'ĐẠT CHUẨN [v]' if s3_ok else 'LỖI [x]'}")
-    print(f"     + Slide 14 So sánh BFS vs A* chuẩn xác : {'ĐẠT CHUẨN [v]' if s14_ok else 'LỖI [x]'}")
+    print(f"     + Slide 14 So sánh BFS/A* & 16 cấu hình: {'ĐẠT CHUẨN [v]' if s14_ok else 'LỖI [x]'}")
 
 docx_path = 'DT69_123000609_BaoCaoWord.docx'
 if os.path.exists(docx_path):

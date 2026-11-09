@@ -28,14 +28,14 @@
 ```text
 .
 ├── DT69_NguyenQuachPhuTai.ipynb        # Notebook Jupyter chính thức (12 cells, có sẵn kết quả chạy thật 100%)
-├── DT69_NguyenQuachPhuTai.pptx         # Bài thuyết trình PowerPoint chuẩn 16:9 Widescreen (15 slide, nhúng hình thật)
+├── DT69_123000609_SlideThuyetTrinh.pptx # Bài thuyết trình PowerPoint 16:9 chính thức (15 slide, nhúng hình thật)
 ├── DT69_123000609_BaoCaoWord.docx      # Báo cáo học thuật chuẩn 12-14 trang (có Mục lục, 7 hình ảnh nhúng & IEEE Ref)
 ├── DT69_123000609_BestModel.joblib     # Pipeline mô hình Random Forest tốt nhất (Test Acc 95.04%, Macro-F1 90.43%)
-├── DT69_Cardiotocography_BaoCao_Code.zip# Gói nén toàn bộ sản phẩm hoàn chỉnh nộp bài
 ├── exact_metrics.json                  # Single Source of Truth chứa toàn bộ chỉ số thực nghiệm chuẩn xác
-├── audit_all_sheets.py                 # Script tự động kiểm tra toàn bộ tiêu chí bài nộp
 ├── app.py                              # Web App Streamlit chẩn đoán thời gian thực (Cộng điểm nâng cao +0.25)
+├── README.md                           # Hướng dẫn chi tiết đồ án & đồng bộ số liệu thực nghiệm
 ├── requirements.txt                    # Danh sách các thư viện phụ thuộc
+├── audit_all_sheets.py                 # Script tự động kiểm tra toàn bộ tiêu chí bài nộp
 ├── cardiotocography.csv                # Dữ liệu offline dự phòng (UCI ID 193)
 ├── CTG.xls                             # File dữ liệu gốc từ kho lưu trữ UCI
 ├── confusion_matrix.png                # Ma trận nhầm lẫn 3x3 phân loại tim thai
@@ -44,7 +44,8 @@
 ├── feature_importance.png              # Top 10 đặc trưng sản khoa quan trọng nhất (ASTV, ALTV, MSTV)
 ├── ga_convergence.png                  # Biểu đồ hội tụ tối ưu trọng số lớp bằng GA
 ├── learning_curve.png                  # Đường cong học (Learning Curve) kiểm soát Overfitting
-└── dt69_models_ieee.png                # Biểu đồ khoa học chuẩn xuất bản IEEE (300 DPI)
+├── dt69_models_ieee.png                # Biểu đồ cột khoa học chuẩn xuất bản IEEE (PNG 300 DPI)
+└── dt69_models_ieee.pdf                # Biểu đồ định dạng vector PDF chất lượng cao
 ```
 
 ---
@@ -94,7 +95,7 @@ Actual Pathologic           1                 2                     29      ( 29
 * **7-Fold Stratified CV trên Train:** `94.25% ± 1.17%`.
 * **Macro-Precision:** `92.12%`, **Macro-Recall:** `89.02%`, **Macro-F1:** `90.43%`.
 * **ROC-AUC One-vs-Rest:** `0.9919` (Khả năng phân tách đa lớp ở mức xuất sắc).
-* **Độ hiệu chuẩn xác suất (Brier Score Loss):** Normal = `0.0278`, Suspect = `0.0338`, Pathologic = `0.0131` -> Mean Brier = `0.0249` (Tiệm cận 0, xác suất dự đoán cực kỳ tin cậy).
+* **Chất lượng dự đoán xác suất (Brier Score Loss):** Normal = `0.0278`, Suspect = `0.0338`, Pathologic = `0.0131` -> Mean Brier = `0.0249` (Tiệm cận 0, chất lượng dự đoán xác suất ở mức rất tốt, đáng tin cậy trong thực hành lâm sàng).
 
 ---
 
