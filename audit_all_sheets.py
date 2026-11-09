@@ -1,5 +1,7 @@
 import openpyxl
 import os
+import json
+import zipfile
 import nbformat
 import docx
 from pptx import Presentation
@@ -81,10 +83,11 @@ if os.path.exists(nb_path):
         "Simulated Annealing 2 lịch làm nguội": "simulated_annealing" in full_code and "geometric" in full_code and "linear" in full_code,
         "Logistic Regression & Odds Ratio (e^beta)": "Odds Ratio" in full_code or "coef_class3" in full_code,
         "KNN khảo sát chuẩn hóa (chênh lệch <= 0.85%)": "KNeighborsClassifier" in full_code,
+        "Support Vector Machine (RBF kernel)": "SVC(kernel='rbf'" in full_code,
         "Keras MLP có class_weight & EarlyStopping": "Sequential" in full_code and "class_weight" in full_code and "EarlyStopping" in full_code,
         "Tính tay Softmax 3 lớp + CCE loss mẫu thật": "Softmax" in full_code and "Categorical Cross-Entropy" in full_code,
         "Vẽ đường cong học (learning_curve)": "learning_curve" in full_code and "learning_curve.png" in full_code,
-        "Bảng so sánh đầy đủ 11 giải pháp": "all_solutions_df" in full_code,
+        "Bảng so sánh đầy đủ 14 giải pháp": "all_solutions_df" in full_code,
         "Đóng gói Pipeline tối ưu BestModel.joblib": "joblib.dump" in full_code and "BestModel.joblib" in full_code,
         "Hàm dự đoán 1 mẫu mới lâm sàng": "predict_single_sample" in full_code
     }
@@ -120,7 +123,7 @@ if os.path.exists(docx_path):
 print(f"\n[5] KIỂM TRA FILE MÔ HÌNH ĐÓNG GÓI & TẤT CẢ BIỂU ĐỒ NỘP:")
 joblib_path = 'DT69_123000609_BestModel.joblib'
 if os.path.exists(joblib_path):
-    m = joblib.load(joblib_path)
+    m_job = joblib.load(joblib_path)
     print(f"  -> Model .joblib   : {joblib_path} ({os.path.getsize(joblib_path)/(1024*1024):.2f} MB) - Nạp thành công [v]")
 
 plots = [
@@ -130,17 +133,43 @@ plots = [
     'feature_importance.png',
     'ga_convergence.png',
     'learning_curve.png',
-    'dt69_models_ieee.png'
+    'dt69_models_ieee.png',
+    'dt69_models_ieee.pdf'
 ]
 for p in plots:
     exists = os.path.exists(p)
     sz_kb = os.path.getsize(p) / 1024 if exists else 0
     print(f"  -> Biểu đồ '{p:<22}': {'TỒN TẠI [v] (' + f'{sz_kb:.1f} KB)' if exists else 'THIẾU [x]'}")
 
-# 6. KIỂM TRA PHẦN MỀM ỨNG DỤNG STREAMLIT & FILE ZIP
-print(f"\n[6] KIỂM TRA PHẦN MỀM ỨNG DỤNG STREAMLIT & FILE ZIP BÀI NỘP:")
+# 6. KIỂM TRA ĐỒNG BỘ NGUỒN CHÂN LÝ DUY NHẤT (EXACT_METRICS.JSON)
+print(f"\n[6] KIỂM TRA ĐỒNG BỘ NGUỒN CHÂN LÝ DUY NHẤT (Single Source of Truth):")
+json_path = 'scratch/exact_metrics.json'
+if os.path.exists(json_path):
+    with open(json_path, 'r', encoding='utf-8') as f:
+        em = json.load(f)
+    print(f"  -> File exact_metrics.json : TỒN TẠI VÀ HỢP LỆ [v]")
+    print(f"     + RF Test Accuracy      : {em['best_model_rf']['test_acc']*100:.2f}%")
+    print(f"     + RF Macro-F1 Score     : {em['best_model_rf']['test_f1_macro']:.4f} ({em['best_model_rf']['test_f1_macro']*100:.2f}%)")
+    print(f"     + RF Macro ROC-AUC      : {em['best_model_rf']['roc_auc_macro']:.4f}")
+    print(f"     + RF Recall Lớp 3       : {em['best_model_rf']['cm_details']['pathologic_correct']}/{em['best_model_rf']['cm_details']['pathologic_total']} ({em['best_model_rf']['cm_details']['pathologic_correct']/em['best_model_rf']['cm_details']['pathologic_total']*100:.2f}%)")
+    print(f"     + Keras MLP Test Acc    : {em['mlp']['test_acc']*100:.2f}% (Loss {em['mlp']['test_loss']:.4f})")
+    print(f"     + GA tối ưu Macro-F1    : {em['optimization']['ga_f1']:.4f} (Trọng số W={em['optimization']['ga_best_w']})")
+
+# 7. KIỂM TRA PHẦN MỀM ỨNG DỤNG STREAMLIT & VỆ SINH FILE ZIP
+print(f"\n[7] KIỂM TRA PHẦN MỀM ỨNG DỤNG STREAMLIT & VỆ SINH GÓI NỘP (ZIP):")
 print(f"  -> Web App chẩn đoán (app.py)             : {'TỒN TẠI [v]' if os.path.exists('app.py') else 'THIẾU [x]'}")
 zip_path = 'DT69_123000609_NguyenQuachPhuTai.zip'
-print(f"  -> Gói zip nộp ({zip_path}): {'TỒN TẠI [v]' if os.path.exists(zip_path) else 'CHƯA TẠO [x]'}")
+if os.path.exists(zip_path):
+    print(f"  -> Gói zip nộp ({zip_path}): TỒN TẠI ({os.path.getsize(zip_path)/(1024*1024):.2f} MB)")
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        namelist = zf.namelist()
+        has_agents = any('.agents' in n for n in namelist)
+        has_cache = any('__pycache__' in n or n.endswith('.pyc') for n in namelist)
+        has_scratch = any('scratch' in n for n in namelist)
+        print(f"     + Không chứa .agents/                  : {'ĐẠT CHUẨN [v]' if not has_agents else 'CÒN CHỨA [x]'}")
+        print(f"     + Không chứa __pycache__ / *.pyc       : {'ĐẠT CHUẨN [v]' if not has_cache else 'CÒN CHỨA [x]'}")
+        print(f"     + Không chứa scratch/                  : {'ĐẠT CHUẨN [v]' if not has_scratch else 'CÒN CHỨA [x]'}")
+else:
+    print(f"  -> Gói zip nộp ({zip_path}): CHƯA TẠO [x]")
 
 print("=" * 80)

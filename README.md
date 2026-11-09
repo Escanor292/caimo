@@ -13,13 +13,13 @@
 | Tham số cá nhân | Giá trị ấn định | Ý nghĩa triển khai |
 | :--- | :--- | :--- |
 | **SEED CÁ NHÂN** | `99055` | Cố định hạt ngẫu nhiên cho toàn bộ các phép lấy mẫu, chia train/test và thuật toán ngẫu nhiên |
-| **TỈ LỆ DỮ LIỆU CÁ NHÂN** | `90%` | Tập dữ liệu con gồm đúng 1.913 mẫu được rút ngẫu nhiên từ 2.126 mẫu gốc của UCI |
-| **TỈ LỆ TEST CÁ NHÂN** | `20%` | Chia phân tầng Stratified: 1.530 mẫu Train (80%) và 383 mẫu Test (20%) |
+| **TỈ LỆ DỮ LIỆU CÁ NHÂN** | `90%` | Tập dữ liệu con gồm đúng 1913 mẫu được rút ngẫu nhiên từ 2.126 mẫu gốc của UCI |
+| **TỈ LỆ TEST CÁ NHÂN** | `20%` | Chia phân tầng Stratified: 1530 mẫu Train (80%) và 383 mẫu Test (20%) |
 | **SỐ FOLD CÁ NHÂN** | `7 folds` | Đánh giá chéo phân tầng (Stratified 7-Fold CV) cho toàn bộ các mô hình |
 | **QUẦN THỂ GA** | `20 cá thể` | Kích thước quần thể trong Thuật toán Di truyền (Buổi 6) |
 | **TỈ LỆ ĐỘT BIẾN GA** | `0.10` | Xác suất đột biến trên từng gen của cá thể |
 | **CÂU TÍNH TAY NGÀY 7** | Câu 6 (Buổi 12) | Mạng nơ-ron truyền thẳng đa tầng (MLP) - Forward Pass, Softmax 3 lớp & Backpropagation |
-| **ĐỘ PHỦ KIẾN THỨC** | `25 / 40` mã | Đạt tỉ lệ **62.5%** ($\ge 50\%$ theo quy định chuẩn của môn học) |
+| **ĐỘ PHỦ KIẾN THỨC** | `25 / 40 (62.5%)` | Đạt tỉ lệ **62.5%** ($\ge 50\%$ theo quy định chuẩn của môn học) |
 
 ---
 
@@ -30,7 +30,7 @@
 ├── DT69_NguyenQuachPhuTai.ipynb        # Notebook Jupyter chính thức (12 cells, có sẵn kết quả chạy thật 100%)
 ├── DT69_123000609_SlideThuyetTrinh.pptx# Bài thuyết trình PowerPoint chuẩn 16:9 Widescreen (15 slide)
 ├── DT69_123000609_BaoCaoWord.docx      # Báo cáo học thuật chuẩn 12-14 trang (có Mục lục, Danh mục hình & IEEE Ref)
-├── DT69_123000609_BestModel.joblib     # Pipeline mô hình Random Forest tốt nhất (Test Acc 95.04%, Macro-F1 91.95%)
+├── DT69_123000609_BestModel.joblib     # Pipeline mô hình Random Forest tốt nhất (Test Acc 95.04%, Macro-F1 90.43%)
 ├── DT69_123000609_NguyenQuachPhuTai.zip# Gói nén toàn bộ sản phẩm hoàn chỉnh nộp bài
 ├── audit_all_sheets.py                 # Script tự động kiểm tra toàn bộ tiêu chí bài nộp
 ├── app.py                              # Web App Streamlit chẩn đoán thời gian thực (Cộng điểm nâng cao +0.25)
@@ -38,7 +38,7 @@
 ├── cardiotocography.csv                # Dữ liệu offline dự phòng (UCI ID 193)
 ├── CTG.xls                             # File dữ liệu gốc từ kho lưu trữ UCI
 ├── confusion_matrix.png                # Ma trận nhầm lẫn 3x3 phân loại tim thai
-├── roc_auc_curve.png                   # Đường cong One-vs-Rest ROC-AUC
+├── roc_auc_curve.png                   # Đường cong One-vs-Rest ROC-AUC (AUC 0.9919)
 ├── mlp_loss_curve.png                  # Đường cong mất mát của mạng Keras MLP
 ├── feature_importance.png              # Top 10 đặc trưng sản khoa quan trọng nhất (ASTV, ALTV, MSTV)
 ├── ga_convergence.png                  # Biểu đồ hội tụ tối ưu trọng số lớp bằng GA
@@ -48,24 +48,26 @@
 
 ---
 
-## 3. BẢNG TỔNG HỢP KẾT QUẢ THỰC NGHIỆM ĐỒ ÁN (ĐỒNG BỘ 100%)
+## 3. BẢNG TỔNG HỢP KẾT QUẢ THỰC NGHIỆM ĐỒ ÁN (ĐỒNG BỘ 100% VỚI OUTPUT NOTEBOOK)
 
 | Nhóm giải pháp | Thuật toán / Mô hình | Test Accuracy | Macro F1-score | Khả năng diễn giải | Rủi ro lâm sàng |
 | :--- | :--- | :---: | :---: | :--- | :--- |
-| **Mô hình cơ sở** | DummyClassifier (most_frequent) | 77.55% | 0.2917 | Tầm thường (Đoán lớp đa số) | Cực kỳ nguy hiểm (Bỏ lọt 100% bệnh lý) |
-| **Hệ chuyên gia (Buổi 7)** | 10 Luật IF-THEN Sản khoa | 85.38% | 0.7940 | **Cực cao** (Suy diễn tiến & lùi giải trình) | Bỏ sót các ca bệnh có tương tác phức tạp |
-| **Tìm kiếm mù (Buổi 5)** | BFS (Ngân sách 150 nút) | 86.93% (CV) | - | Rõ ràng (Tập 4 đặc trưng) | Bùng nổ tổ hợp, không thực tế |
+| **Mô hình cơ sở** | DummyClassifier (most_frequent) | 77.55% | 0.2912 | Tầm thường (Đoán lớp đa số) | Cực kỳ nguy hiểm (Bỏ lọt 100% bệnh lý) |
+| **Hệ chuyên gia (Buổi 7)** | 10 Luật IF-THEN Sản khoa | 85.12% | 0.7066 | **Cực cao** (Suy diễn tiến & lùi giải trình) | Bỏ sót các ca bệnh có tương tác phức tạp |
+| **Tìm kiếm mù (Buổi 5)** | BFS (Ngân sách 150 nút) | 91.57% (CV) | - | Rõ ràng (150 nút, 4 biến) | Bùng nổ tổ hợp, không thực tế |
 | **Tìm kiếm có thông tin** | Greedy Best-First (Mutual Info) | 86.93% (CV) | - | Rõ ràng (Mở rộng 6 nút) | Dễ kẹt cực trị địa phương |
-| **Tìm kiếm có thông tin** | A* Search ($f = g + h_1$) | 86.93% (CV) | - | Tối ưu (Heuristic chấp nhận được) | Phụ thuộc vào chất lượng Heuristic |
-| **Tối ưu cục bộ (Buổi 6)** | Hill Climbing (20 Restarts) | - | 0.8144 | Trọng số lớp [$w_1, w_2, w_3$] | Tỉ lệ kẹt cực trị địa phương: 65.0% |
-| **Tối ưu cục bộ (Buổi 6)** | Simulated Annealing (Geometric) | - | 0.8108 | Trọng số lớp [$w_1, w_2, w_3$] | Cần tinh chỉnh nhiệt độ ban đầu |
-| **Tối ưu tiến hóa (Buổi 6)** | Genetic Algorithm (Pop=20, Mut=0.10) | - | **0.8147** | Trọng số phạt lớp tối ưu | Đột phá khỏi cực trị địa phương |
-| **Học máy cổ điển (Buổi 10)** | K-Nearest Neighbors ($k=3$, Scaled) | 89.74% | 0.8210 | Thấp (Khoảng cách điểm) | Chênh lệch chuẩn hóa $\le 0.85\%$ |
-| | Decision Tree ($max\_depth=6$) | 92.09% | 0.8650 | Trực quan (Cây quyết định) | Dễ Overfitting nếu cây quá sâu |
-| | Logistic Regression (L2) | 89.82% | 0.8050 | Tốt (Odds Ratio $e^\beta$) | ASTV tăng nguy cơ bệnh lý gấp 4.75 lần |
-| | Support Vector Machine (RBF) | 93.21% | 0.8710 | Hộp đen | Ranh giới phi tuyến tốt |
-| **Học sâu (Buổi 12)** | Keras MLP (class_weight + EarlyStop) | 93.99% | 0.8920 | Hộp đen (Hội tụ sau 53 epochs) | Bác sĩ khó tin tưởng khi ra quyết định mổ |
-| **MÔ HÌNH XUẤT SẮC NHẤT** | **Random Forest Pipeline (200 cây)** | **95.04%** | **0.9195** | **Rất tốt (Gini Imp: ASTV, ALTV, MSTV)** | **Rất thấp: Recall Lớp 3 đạt 90.62% (29/32 ca)** |
+| **Tìm kiếm có thông tin** | Greedy Best-First (Custom Pen) | 86.93% (CV) | - | Rõ ràng (Mở rộng 6 nút) | Dễ kẹt cực trị địa phương |
+| **Tìm kiếm có thông tin** | A* Search ($f = g + h_1$) | 86.93% (CV) | - | Tối ưu (Heuristic chấp nhận được) | Chi phí thấp gấp 25 lần BFS |
+| **Tối ưu cục bộ (Buổi 6)** | Hill Climbing (20 Restarts) | - | 0.8132 | Trọng số lớp W = [1.0, 2.25, 1.81] | Tỉ lệ kẹt cực trị địa phương: 60.0% |
+| **Tối ưu cục bộ (Buổi 6)** | Simulated Annealing (Geom) | - | 0.7901 | Trọng số lớp W = [1.0, 2.78, 6.88] | Cần tinh chỉnh nhiệt độ ban đầu |
+| **Tối ưu cục bộ (Buổi 6)** | Simulated Annealing (Lin) | - | 0.8095 | Trọng số lớp W = [1.0, 2.93, 2.94] | Làm nguội tuyến tính giảm dần |
+| **Tối ưu tiến hóa (Buổi 6)** | Genetic Algorithm (Pop=20, Mut=0.10) | - | **0.8146** | Trọng số phạt lớp W = [1.0, 2.36, 1.87] | Đột phá khỏi cực trị địa phương |
+| **Học máy cổ điển (Buổi 10)** | K-Nearest Neighbors ($k=3$, Scaled) | 91.64% | 0.8408 | Thấp (Khoảng cách điểm) | Chênh lệch chuẩn hóa $\le 0.85\%$ |
+| | Decision Tree ($max\_depth=6$) | 93.73% | 0.8848 | Trực quan (Cây quyết định) | Dễ Overfitting nếu cây quá sâu |
+| | Logistic Regression (L2) | 89.82% | 0.7972 | Tốt (Odds Ratio $e^\beta$) | ASTV tăng nguy cơ suy thai gấp 4.75 lần |
+| | Support Vector Machine (RBF) | 90.86% | 0.8219 | Hộp đen ranh giới phi tuyến | 7-Fold CV Acc = 90.39% |
+| **Học sâu (Buổi 12)** | Keras MLP (class_weight + EarlyStop) | 89.56% | 0.8450 | Hộp đen (Dừng sau 53 epochs) | Bác sĩ khó tin tưởng khi ra quyết định mổ |
+| **MÔ HÌNH XUẤT SẮC NHẤT** | **Random Forest Pipeline (200 cây)** | **95.04%** | **0.9043** | **Rất tốt (Gini Imp: ASTV, ALTV, MSTV)** | **Rất thấp: Recall Lớp 3 đạt 90.62% (29/32 ca)** |
 
 ---
 
@@ -77,9 +79,10 @@ Actual Normal             293                 3                      1      (293
 Actual Suspect             10                42                      2      ( 42/54  = 77.78%)
 Actual Pathologic           1                 2                     29      ( 29/32  = 90.62%)
 ```
-* **Tổng thể Accuracy:** `95.04%` (364 / 383 mẫu kiểm thử).
-* **Macro-Precision:** `92.12%`, **Macro-Recall:** `89.02%`, **Macro-F1:** `91.95%`.
-* **ROC-AUC One-vs-Rest:** `0.9856` (Khả năng phân tách đa lớp ở mức xuất sắc).
+* **Tổng thể Test Accuracy:** `95.04%` (364 / 383 mẫu kiểm thử).
+* **7-Fold Stratified CV trên Train:** `94.25% ± 1.17%`.
+* **Macro-Precision:** `92.12%`, **Macro-Recall:** `89.02%`, **Macro-F1:** `90.43%`.
+* **ROC-AUC One-vs-Rest:** `0.9919` (Khả năng phân tách đa lớp ở mức xuất sắc).
 
 ---
 

@@ -71,10 +71,14 @@ flowchart TD
 
 ## 4. DOCUMENT PUBLISHING, USE CASE SPECS & SLIDES
 
-### QUY TẮC BẮT BUỘC KHI XUẤT BẢN SLIDE VÀ BÁO CÁO:
-1. **Tỷ lệ Slide chuẩn 16:9 Widescreen:** Mọi file PowerPoint `.pptx` BẮT BUỘC phải thiết lập rõ ràng tỷ lệ 16:9 (`prs.slide_width = Inches(13.333)`, `prs.slide_height = Inches(7.5)`). Tuyệt đối không để kích thước mặc định 4:3 (10x7.5 in).
-2. **Cấu trúc Báo cáo Word chuẩn mực:** Báo cáo Word `.docx` BẮT BUỘC phải có Mục lục tự động, Danh mục bảng biểu/hình ảnh và Danh mục tài liệu tham khảo (References).
-3. **Đồng bộ Nguồn Chân Lý Duy Nhất (Single Source of Truth):** Tuyệt đối không hardcode số liệu ước lượng. Mọi chỉ số (Accuracy, F1, Ma trận nhầm lẫn, Top đặc trưng, số lượng mẫu) trong Slide và Báo cáo Word BẮT BUỘC phải đối chiếu chéo (cross-check) khớp 100% với output thực tế của mã nguồn/notebook.
+### QUY TẮC BẮT BUỘC KHI XUẤT BẢN SLIDE VÀ BÁO CÁO (STRICT PUBLISHING PROTOCOL):
+1. **Tỷ lệ Slide chuẩn 16:9 Widescreen:** Mọi file PowerPoint `.pptx` BẮT BUỘC phải thiết lập rõ ràng tỷ lệ 16:9 (`prs.slide_width = Inches(13.333)`, `prs.slide_height = Inches(7.5)`). Tuyệt đối cấm để kích thước mặc định 4:3 (10x7.5 in).
+2. **Cấu trúc Báo cáo Word chuẩn mực:** Báo cáo Word `.docx` BẮT BUỘC phải có Mục lục tự động (TOC), Danh mục bảng biểu/hình ảnh và Danh mục tài liệu tham khảo chuẩn IEEE/Nature (References). Đảm bảo số trang đáp ứng đúng yêu cầu của đề tài (ví dụ: 12–15 trang).
+3. **Đồng bộ Nguồn Chân Lý Duy Nhất (Single Source of Truth):** Tuyệt đối KHÔNG ĐƯỢC hardcode số liệu ước lượng, không chèn số placeholder, và không copy số cũ giữa các phiên bản. Mọi chỉ số (Accuracy, F1, Ma trận nhầm lẫn, Top đặc trưng, số lượng mẫu, Odds Ratio, các tham số thuật toán) trong Slide, Báo cáo Word, README và Hình ảnh BẮT BUỘC phải đối chiếu chéo (cross-check) khớp 100% với output thực tế của mã nguồn/notebook.
+4. **Cơ chế Cầu nối Dữ liệu JSON Chuẩn hóa (Metrics Export Protocol):**
+   * Trong mã nguồn/notebook, luôn có một cell cuối kỳ hoặc hàm lưu trữ toàn bộ chỉ số thực nghiệm ra file JSON trung gian (ví dụ: `scratch/exact_metrics.json`).
+   * Toàn bộ các script sinh báo cáo (`build_academic_doc.py`), sinh slide (`build_deck_pptx.py`), cập nhật README, và vẽ biểu đồ IEEE (`make_ieee_plot.py`) BẮT BUỘC phải đọc trực tiếp từ file JSON này. Nếu file JSON không tồn tại hoặc thiếu trường dữ liệu, script phải báo lỗi ngay lập tức thay vì dùng số giả định.
+5. **Vệ sinh Đóng gói Sản phẩm Nộp (Clean Packaging Protocol):** Khi đóng gói file nén (.zip) nộp bài, tuyệt đối cấm đưa vào các thư mục cấu hình nội bộ (`.agents/`, `.gemini/`, `.git/`), các file cache (`__pycache__/`, `*.pyc`), hoặc các file nháp tạm thời (`scratch/`). Gói nộp chỉ chứa: File Báo cáo `.docx`, Slide `.pptx`, Notebook `.ipynb` đã chạy đầy đủ output, thư mục hình ảnh/mô hình được yêu cầu và file README/requirements chuẩn.
 
 * **[python-docx](https://github.com/python-openxml/python-docx):** Generates thesis reports matching standard margins (2.5cm), Times New Roman font, and numbered table captions.
   * Report helper: `python scripts/build_academic_doc.py --output BaoCao_Chuan.docx`
