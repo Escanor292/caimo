@@ -109,6 +109,14 @@ if os.path.exists(pptx_path):
     print(f"  -> Slide PowerPoint: {n_slides} slide (Quy định 12-18 slide) -> {'ĐẠT SỐ LƯỢNG [v]' if 12 <= n_slides <= 18 else 'BỊ TRỪ ĐIỂM [x]'}")
     print(f"  -> Tỉ lệ khung hình: {w_in:.2f}\" x {h_in:.2f}\" (Chuẩn 16:9 Widescreen) -> {'ĐẠT CHUẨN 16:9 [v]' if is_widescreen else 'CHƯA ĐẠT 16:9 [x]'}")
     print(f"  -> Hình ảnh nhúng trong Slide: {pic_count} hình ảnh thật -> {'ĐẠT CHUẨN NHÚNG [v]' if pic_count >= 6 else 'THIẾU ẢNH [x]'}")
+    
+    # Kiểm tra tính chính xác của Slide 3 và Slide 14
+    s3_txt = " ".join([sh.text for sh in prs.slides[2].shapes if sh.has_text_frame])
+    s14_txt = " ".join([sh.text for sh in prs.slides[13].shapes if sh.has_text_frame])
+    s3_ok = ("19%" not in s3_txt) and ("20%" in s3_txt)
+    s14_ok = ("Cùng Acc" not in s14_txt) and ("BFS đạt Acc" in s14_txt)
+    print(f"     + Slide 3 Tỉ lệ Test = 20% (không lỗi 19%): {'ĐẠT CHUẨN [v]' if s3_ok else 'LỖI [x]'}")
+    print(f"     + Slide 14 So sánh BFS vs A* chuẩn xác : {'ĐẠT CHUẨN [v]' if s14_ok else 'LỖI [x]'}")
 
 docx_path = 'DT69_123000609_BaoCaoWord.docx'
 if os.path.exists(docx_path):
@@ -175,7 +183,10 @@ if os.path.exists(zip_path):
         has_cache = any('__pycache__' in n or n.endswith('.pyc') for n in namelist)
         has_scratch = any('scratch' in n for n in namelist)
         has_metrics = 'exact_metrics.json' in namelist
+        has_official_slide = 'DT69_123000609_SlideThuyetTrinh.pptx' in namelist
+        has_dup_slide = 'DT69_NguyenQuachPhuTai.pptx' in namelist
         print(f"     + Chứa exact_metrics.json              : {'ĐẠT CHUẨN [v]' if has_metrics else 'THIẾU [x]'}")
+        print(f"     + Chứa Slide chuẩn duy nhất trong zip  : {'ĐẠT CHUẨN [v]' if has_official_slide and not has_dup_slide else 'CHƯA TỐI ƯU [x]'}")
         print(f"     + Không chứa .agents/                  : {'ĐẠT CHUẨN [v]' if not has_agents else 'CÒN CHỨA [x]'}")
         print(f"     + Không chứa __pycache__ / *.pyc       : {'ĐẠT CHUẨN [v]' if not has_cache else 'CÒN CHỨA [x]'}")
         print(f"     + Không chứa scratch/                  : {'ĐẠT CHUẨN [v]' if not has_scratch else 'CÒN CHỨA [x]'}")

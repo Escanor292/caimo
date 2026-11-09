@@ -77,7 +77,7 @@
 | **Học máy cổ điển** | KNN (k=3, Đã chuẩn hóa) | 91.64% | 0.8408 | Thấp (Khoảng cách Euclidean) | Nhạy cảm với nhiễu; chuẩn hóa tăng <= 0.85 điểm % |
 | **Học máy cổ điển** | Cây quyết định (max_depth=6) | 93.73% | 0.8848 | Trực quan (Cây phân nhánh rõ ràng) | Dễ overfitting nếu không giới hạn độ sâu |
 | **Học máy cổ điển** | Support Vector Machine (RBF Kernel) | 90.86% | 0.8219 | Hộp đen ranh giới phi tuyến (7-Fold: 90.39%) | Khó giải thích trọng số |
-| **Học sâu (Buổi 12)** | Keras MLP (class_weight + EarlyStop) | 89.56% | 0.8450 | Hộp đen (Dừng tại Epoch 53, 3 seeds: 90.51% ± 0.25%) | Bác sĩ khó tin tưởng khi ra quyết định mổ |
+| **Học sâu (Buổi 12)** | Keras MLP (class_weight + EarlyStop) | 89.56% | 0.8450 | Hộp đen (Dừng tại Epoch 53, 3 seeds: 89.99% ± 0.81%) | Bác sĩ khó tin tưởng khi ra quyết định mổ |
 | **MÔ HÌNH XUẤT SẮC NHẤT** | **Random Forest Pipeline (200 cây)** | **95.04%** | **0.9043** | **Rất tốt (Gini Imp: ASTV, ALTV, MSTV)** | **Rất thấp: Recall Lớp 3 đạt 90.62% (29/32 ca)** |
 
 ---
@@ -99,6 +99,7 @@ Actual Pathologic           1                 2                     29      ( 29
 ---
 
 ## 6. MINH HỌA TÍNH TAY NGÀY 7 (CÂU 6 - BUỔI 12)
+* **Lưu ý:** Bộ trọng số $W$ và $V$ dưới đây là giả định nhằm mục đích minh họa trực quan phương pháp tính tay 2 tầng theo đề thi tại lớp; dữ liệu đầu vào được lấy chính xác từ Ca bệnh số 1 tập Train.
 * **Nguồn dữ liệu:** Lấy chính xác từ ca bệnh số 1 tập Train (Row 0):
   + ASTV đo: `59.0%` -> Chuẩn hóa $x_1 = 0.6894$
   + ALTV đo: `0.0%` -> Chuẩn hóa $x_2 = -0.5429$

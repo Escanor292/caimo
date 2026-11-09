@@ -172,8 +172,8 @@
     "test_loss": 0.2638,
     "f1_macro": 0.845,
     "stopped_epoch": 53,
-    "stability_3seeds_mean": 0.9051,
-    "stability_3seeds_std": 0.0025,
+    "stability_3seeds_mean": 0.8999,
+    "stability_3seeds_std": 0.0081,
     "manual_calc": {
       "sample_source": "Train row 0 (scaled ASTV, ALTV)",
       "x1_astv_scaled": 0.6894,
