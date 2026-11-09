@@ -1,0 +1,280 @@
+{
+  "student": {
+    "name": "Nguyễn Quách Phú Tài",
+    "mssv": "123000609",
+    "class": "23CT113",
+    "project": "DT69",
+    "seed": 99055,
+    "sample_frac": 0.9,
+    "sample_count": 1913,
+    "train_count": 1530,
+    "test_count": 383,
+    "cv_folds": 7,
+    "ga_pop": 20,
+    "ga_mut": 0.1,
+    "knowledge_coverage": "25 / 40 (62.5%)"
+  },
+  "eda_top5": {
+    "LB": {
+      "mean": 133.449,
+      "std": 9.895,
+      "min": 106.0,
+      "max": 160.0,
+      "skew": 0.015
+    },
+    "AC": {
+      "mean": 0.003,
+      "std": 0.004,
+      "min": 0.0,
+      "max": 0.019,
+      "skew": 1.209
+    },
+    "ASTV": {
+      "mean": 47.025,
+      "std": 17.221,
+      "min": 12.0,
+      "max": 87.0,
+      "skew": -0.013
+    },
+    "MSTV": {
+      "mean": 1.335,
+      "std": 0.896,
+      "min": 0.2,
+      "max": 7.0,
+      "skew": 1.68
+    },
+    "ALTV": {
+      "mean": 10.142,
+      "std": 18.723,
+      "min": 0.0,
+      "max": 91.0,
+      "skew": 2.161
+    }
+  },
+  "class_distribution_sample": {
+    "normal": 1482,
+    "suspect": 270,
+    "pathologic": 161,
+    "normal_pct": 77.47,
+    "suspect_pct": 14.11,
+    "pathologic_pct": 8.42
+  },
+  "eda": {
+    "class_leakage_acc": 0.9843,
+    "clean_baseline_acc": 0.9399,
+    "dummy_acc": 0.7755,
+    "dummy_f1": 0.2912
+  },
+  "expert_system": {
+    "threshold_astv": 61.0,
+    "threshold_altv": 12.0,
+    "threshold_mstv": 0.7,
+    "accuracy": 0.8512,
+    "f1_macro": 0.7066
+  },
+  "search": {
+    "bfs_nodes": 150,
+    "bfs_acc": 0.9157,
+    "bfs_features": [
+      "MSTV",
+      "ASTV",
+      "ALTV",
+      "Mean"
+    ],
+    "greedy_h1_nodes": 6,
+    "greedy_h1_acc": 0.8693,
+    "greedy_h1_features": [
+      "MSTV",
+      "Mean",
+      "Median",
+      "Min"
+    ],
+    "greedy_h2_nodes": 6,
+    "greedy_h2_acc": 0.8693,
+    "greedy_h2_features": [
+      "MSTV",
+      "Mean",
+      "Median",
+      "Min"
+    ],
+    "astar_nodes": 6,
+    "astar_acc": 0.8693,
+    "astar_features": [
+      "MSTV",
+      "Mean",
+      "Median",
+      "Min"
+    ],
+    "cost_efficiency_ratio": 25
+  },
+  "optimization": {
+    "initial_unweighted_f1": 0.798,
+    "hc_f1": 0.8132,
+    "hc_stuck_pct": 60.0,
+    "hc_best_w": [
+      1.0,
+      2.25,
+      1.81
+    ],
+    "sa_geom_f1": 0.7901,
+    "sa_geom_w": [
+      1.0,
+      2.78,
+      6.88
+    ],
+    "sa_lin_f1": 0.8095,
+    "sa_lin_w": [
+      1.0,
+      2.93,
+      2.94
+    ],
+    "ga_f1": 0.8146,
+    "ga_best_w": [
+      1.0,
+      2.36,
+      1.87
+    ]
+  },
+  "classical_ml": {
+    "logreg_acc": 0.8982,
+    "logreg_f1": 0.7972,
+    "odds_ratios_top3": [
+      {
+        "feature": "ASTV",
+        "beta": 1.558,
+        "odds_ratio": 4.748
+      },
+      {
+        "feature": "LB",
+        "beta": 1.497,
+        "odds_ratio": 4.468
+      },
+      {
+        "feature": "Variance",
+        "beta": 0.891,
+        "odds_ratio": 2.437
+      }
+    ],
+    "knn_best_k": 3,
+    "knn_scaled_acc": 0.9164,
+    "knn_f1": 0.8408,
+    "knn_max_diff_pct": 0.85,
+    "tree_best_depth": 6,
+    "tree_cv_acc": 0.9209,
+    "tree_test_acc": 0.9373,
+    "tree_f1": 0.8848,
+    "svm_cv_acc": 0.9039,
+    "svm_test_acc": 0.9086,
+    "svm_f1": 0.8219
+  },
+  "mlp": {
+    "test_acc": 0.8956,
+    "test_loss": 0.2638,
+    "f1_macro": 0.845,
+    "stopped_epoch": 53,
+    "stability_3seeds_mean": 0.9051,
+    "stability_3seeds_std": 0.0025,
+    "manual_calc": {
+      "sample_source": "Train row 0 (scaled ASTV, ALTV)",
+      "x1_astv_scaled": 0.6894,
+      "x2_altv_scaled": -0.5429,
+      "raw_astv": 59.0,
+      "raw_altv": 0.0,
+      "y_true": 1,
+      "y_true_cls_idx": 0,
+      "z1": 0.0897,
+      "h1": 0.0897,
+      "z2": 0.2836,
+      "h2": 0.2836,
+      "z_out": [
+        0.203,
+        0.2732,
+        0.2791
+      ],
+      "softmax_probs": [
+        0.3173,
+        0.3403,
+        0.3424
+      ],
+      "loss_cce": 1.148,
+      "delta_out": [
+        -0.6827,
+        0.3403,
+        0.3424
+      ],
+      "v_new": [
+        [
+          0.2061,
+          0.4969,
+          0.0969
+        ],
+        [
+          0.3194,
+          0.0903,
+          0.5903
+        ]
+      ]
+    }
+  },
+  "best_model_rf": {
+    "params": {
+      "max_depth": 16,
+      "min_samples_split": 2,
+      "n_estimators": 200
+    },
+    "cv7_mean": 0.9425,
+    "cv7_std": 0.0117,
+    "test_acc": 0.9504,
+    "test_f1_macro": 0.9043,
+    "test_precision_macro": 0.9212,
+    "test_recall_macro": 0.8902,
+    "roc_auc_macro": 0.9919,
+    "brier_scores": {
+      "normal": 0.0278,
+      "suspect": 0.0338,
+      "pathologic": 0.0131,
+      "mean": 0.0249
+    },
+    "confusion_matrix": [
+      [
+        293,
+        3,
+        1
+      ],
+      [
+        10,
+        42,
+        2
+      ],
+      [
+        1,
+        2,
+        29
+      ]
+    ],
+    "cm_details": {
+      "normal_correct": 293,
+      "normal_total": 297,
+      "suspect_correct": 42,
+      "suspect_total": 54,
+      "pathologic_correct": 29,
+      "pathologic_total": 32
+    },
+    "top3_features": [
+      {
+        "feature": "ASTV",
+        "importance": 0.1392
+      },
+      {
+        "feature": "ALTV",
+        "importance": 0.1232
+      },
+      {
+        "feature": "MSTV",
+        "importance": 0.1004
+      }
+    ],
+    "ac_rank": 6,
+    "ac_importance": 0.054
+  }
+}

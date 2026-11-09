@@ -174,12 +174,21 @@ if st.button("🩺 THỰC HIỆN PHÂN TÍCH & CHẨN ĐOÁN LÂM SÀNG", type="
         else:
             st.error(f"### 🔴 BÁO ĐỘNG ĐỎ: SUY THAI CẤP TÍNH (PATHOLOGIC)\n**Độ tin cậy:** {pred_proba[2]*100:.2f}%\n\n*Khuyến nghị:* Thai nhi có dấu hiệu thiếu oxy não nghiêm trọng. Cần kích hoạt quy trình hội chẩn mổ lấy thai cấp cứu!")
             
-        # Biểu đồ phân phối xác suất
-        proba_df = pd.DataFrame({
-            'Trạng thái': ['Bình thường (1)', 'Nghi ngờ (2)', 'Bệnh lý (3)'],
-            'Xác suất (%)': [pred_proba[0]*100, pred_proba[1]*100, pred_proba[2]*100]
-        })
-        st.bar_chart(proba_df.set_index('Trạng thái'))
+        # Biểu đồ phân phối xác suất bằng Matplotlib (Thuần túy, 100% không phụ thuộc pyarrow)
+        import matplotlib.pyplot as plt
+        fig_prob, ax_prob = plt.subplots(figsize=(6, 2.5), dpi=150)
+        classes = ['Bình thường (1)', 'Nghi ngờ (2)', 'Bệnh lý (3)']
+        probs_pct = [pred_proba[0]*100, pred_proba[1]*100, pred_proba[2]*100]
+        colors = ['#2ca02c', '#ff7f0e', '#d62728']
+        bars = ax_prob.barh(classes, probs_pct, color=colors, height=0.55, edgecolor='black', linewidth=0.5)
+        for b, v in zip(bars, probs_pct):
+            ax_prob.text(v + 1.5, b.get_y() + b.get_height()/2, f'{v:.2f}%', va='center', fontsize=9, fontweight='bold')
+        ax_prob.set_xlim(0, 115)
+        ax_prob.set_xlabel('Xác suất dự đoán (%)', fontsize=9)
+        ax_prob.grid(True, linestyle='--', alpha=0.5, axis='x')
+        plt.tight_layout()
+        st.pyplot(fig_prob)
+        plt.close(fig_prob)
 
     with res_col2:
         st.markdown("#### Đối chiếu với Hệ Chuyên Gia Luật (Hybrid AI)")

@@ -28,10 +28,11 @@
 ```text
 .
 ├── DT69_NguyenQuachPhuTai.ipynb        # Notebook Jupyter chính thức (12 cells, có sẵn kết quả chạy thật 100%)
-├── DT69_123000609_SlideThuyetTrinh.pptx# Bài thuyết trình PowerPoint chuẩn 16:9 Widescreen (15 slide)
-├── DT69_123000609_BaoCaoWord.docx      # Báo cáo học thuật chuẩn 12-14 trang (có Mục lục, Danh mục hình & IEEE Ref)
+├── DT69_NguyenQuachPhuTai.pptx         # Bài thuyết trình PowerPoint chuẩn 16:9 Widescreen (15 slide, nhúng hình thật)
+├── DT69_123000609_BaoCaoWord.docx      # Báo cáo học thuật chuẩn 12-14 trang (có Mục lục, 7 hình ảnh nhúng & IEEE Ref)
 ├── DT69_123000609_BestModel.joblib     # Pipeline mô hình Random Forest tốt nhất (Test Acc 95.04%, Macro-F1 90.43%)
-├── DT69_123000609_NguyenQuachPhuTai.zip# Gói nén toàn bộ sản phẩm hoàn chỉnh nộp bài
+├── DT69_Cardiotocography_BaoCao_Code.zip# Gói nén toàn bộ sản phẩm hoàn chỉnh nộp bài
+├── exact_metrics.json                  # Single Source of Truth chứa toàn bộ chỉ số thực nghiệm chuẩn xác
 ├── audit_all_sheets.py                 # Script tự động kiểm tra toàn bộ tiêu chí bài nộp
 ├── app.py                              # Web App Streamlit chẩn đoán thời gian thực (Cộng điểm nâng cao +0.25)
 ├── requirements.txt                    # Danh sách các thư viện phụ thuộc
@@ -48,30 +49,40 @@
 
 ---
 
-## 3. BẢNG TỔNG HỢP KẾT QUẢ THỰC NGHIỆM ĐỒ ÁN (ĐỒNG BỘ 100% VỚI OUTPUT NOTEBOOK)
+## 3. THÍ NGHIỆM ĐỐI CHỨNG RÒ RỈ DỮ LIỆU (CELL 4)
+
+| Cấu hình thí nghiệm | Mô hình kiểm thử | Biến đầu vào | Test Accuracy | Ý nghĩa lâm sàng |
+| :--- | :--- | :--- | :---: | :--- |
+| **Có biến CLASS (Rò rỉ)** | Decision Tree | 21 chỉ số CTG + Cột CLASS | `98.43%` | Độ chính xác ảo (CLASS mã hóa phân loại của bác sĩ sau sinh) |
+| **Không dùng CLASS (Chuẩn sạch)** | Decision Tree | Duy nhất 21 chỉ số đo đạc CTG | `93.99%` | Baseline thực tế, khách quan và an toàn |
+| **Pipeline tối ưu cuối kỳ** | Random Forest Pipeline | 21 chỉ số CTG (Dữ liệu sạch) | **`95.04%`** | **Mô hình xuất sắc nhất, Macro-F1 90.43%** |
+
+---
+
+## 4. BẢNG TỔNG HỢP KẾT QUẢ THỰC NGHIỆM ĐỒ ÁN (ĐỒNG BỘ 100% VỚI OUTPUT NOTEBOOK)
 
 | Nhóm giải pháp | Thuật toán / Mô hình | Test Accuracy | Macro F1-score | Khả năng diễn giải | Rủi ro lâm sàng |
 | :--- | :--- | :---: | :---: | :--- | :--- |
 | **Mô hình cơ sở** | DummyClassifier (most_frequent) | 77.55% | 0.2912 | Tầm thường (Đoán lớp đa số) | Cực kỳ nguy hiểm (Bỏ lọt 100% bệnh lý) |
-| **Hệ chuyên gia (Buổi 7)** | 10 Luật IF-THEN Sản khoa | 85.12% | 0.7066 | **Cực cao** (Suy diễn tiến & lùi giải trình) | Bỏ sót các ca bệnh có tương tác phức tạp |
-| **Tìm kiếm mù (Buổi 5)** | BFS (Ngân sách 150 nút) | 91.57% (CV) | - | Rõ ràng (150 nút, 4 biến) | Bùng nổ tổ hợp, không thực tế |
-| **Tìm kiếm có thông tin** | Greedy Best-First (Mutual Info) | 86.93% (CV) | - | Rõ ràng (Mở rộng 6 nút) | Dễ kẹt cực trị địa phương |
-| **Tìm kiếm có thông tin** | Greedy Best-First (Custom Pen) | 86.93% (CV) | - | Rõ ràng (Mở rộng 6 nút) | Dễ kẹt cực trị địa phương |
-| **Tìm kiếm có thông tin** | A* Search ($f = g + h_1$) | 86.93% (CV) | - | Tối ưu (Heuristic chấp nhận được) | Chi phí thấp gấp 25 lần BFS |
-| **Tối ưu cục bộ (Buổi 6)** | Hill Climbing (20 Restarts) | - | 0.8132 | Trọng số lớp W = [1.0, 2.25, 1.81] | Tỉ lệ kẹt cực trị địa phương: 60.0% |
-| **Tối ưu cục bộ (Buổi 6)** | Simulated Annealing (Geom) | - | 0.7901 | Trọng số lớp W = [1.0, 2.78, 6.88] | Cần tinh chỉnh nhiệt độ ban đầu |
-| **Tối ưu cục bộ (Buổi 6)** | Simulated Annealing (Lin) | - | 0.8095 | Trọng số lớp W = [1.0, 2.93, 2.94] | Làm nguội tuyến tính giảm dần |
-| **Tối ưu tiến hóa (Buổi 6)** | Genetic Algorithm (Pop=20, Mut=0.10) | - | **0.8146** | Trọng số phạt lớp W = [1.0, 2.36, 1.87] | Đột phá khỏi cực trị địa phương |
-| **Học máy cổ điển (Buổi 10)** | K-Nearest Neighbors ($k=3$, Scaled) | 91.64% | 0.8408 | Thấp (Khoảng cách điểm) | Chênh lệch chuẩn hóa $\le 0.85\%$ |
-| | Decision Tree ($max\_depth=6$) | 93.73% | 0.8848 | Trực quan (Cây quyết định) | Dễ Overfitting nếu cây quá sâu |
-| | Logistic Regression (L2) | 89.82% | 0.7972 | Tốt (Odds Ratio $e^\beta$) | ASTV tăng nguy cơ suy thai gấp 4.75 lần |
-| | Support Vector Machine (RBF) | 90.86% | 0.8219 | Hộp đen ranh giới phi tuyến | 7-Fold CV Acc = 90.39% |
-| **Học sâu (Buổi 12)** | Keras MLP (class_weight + EarlyStop) | 89.56% | 0.8450 | Hộp đen (Dừng sau 53 epochs) | Bác sĩ khó tin tưởng khi ra quyết định mổ |
+| **Hệ chuyên gia (Buổi 7)** | 10 Luật IF-THEN (Suy diễn lùi) | 85.12% | 0.7066 | Rất cao (Giải trình chuỗi luật) | Bỏ sót các ca tương tác phi tuyến phức tạp |
+| **Tìm kiếm mù (Buổi 5)** | BFS (150 nút chạm ngưỡng) | 91.57% (CV) | - | Rõ ràng (Tập 4 biến: MSTV, ASTV, ALTV, Mean) | Bùng nổ tổ hợp, không khả thi khi dữ liệu lớn |
+| **Tìm kiếm Heuristic** | Greedy Best-First (MI - 6 nút) | 86.93% (CV) | - | Rõ ràng (Tập 4 biến: MSTV, Mean, Median, Min) | Dễ bị kẹt ở cực trị địa phương |
+| **Tìm kiếm Heuristic** | Greedy Best-First (Custom - 6 nút) | 86.93% (CV) | - | Rõ ràng (Tập 4 biến) | Dễ bị kẹt ở cực trị địa phương |
+| **Tìm kiếm tối ưu (Buổi 5)** | A* Search (g + h1 - 6 nút) | 86.93% (CV) | - | Tối ưu (Tiết kiệm gấp 25 lần số nút BFS) | Phụ thuộc chất lượng hàm Heuristic |
+| **Tối ưu cục bộ (Buổi 6)** | Hill Climbing (20 Restarts) | - | 0.8132 | Trọng số lớp tường minh: [1.0, 2.25, 1.81] | Tỉ lệ kẹt cực trị địa phương cao (60.0%) |
+| **Tối ưu làm nguội** | Simulated Annealing (Hình học) | - | 0.7901 | Trọng số phạt: [1.0, 2.78, 6.88] | Cần tinh chỉnh nhiệt độ ban đầu |
+| **Tối ưu làm nguội** | Simulated Annealing (Tuyến tính) | - | 0.8095 | Trọng số phạt: [1.0, 2.93, 2.94] | Làm nguội đều đặn |
+| **TỐI ƯU TIẾN HÓA (Buổi 6)** | **Genetic Algorithm (Pop 20, Mut 0.10)** | - | **0.8146** | **Trọng số lớp tối ưu: [1.0, 2.36, 1.87]** | **Hội tụ toàn cục, vượt trội so với ban đầu (0.7980)** |
+| **Học máy cổ điển (Buổi 10)**| Logistic Regression | 89.82% | 0.7972 | Rất tốt (Odds Ratio: ASTV 4.75x, LB 4.47x) | Không nắm bắt được quan hệ phi tuyến |
+| **Học máy cổ điển** | KNN (k=3, Đã chuẩn hóa) | 91.64% | 0.8408 | Thấp (Khoảng cách Euclidean) | Nhạy cảm với nhiễu; chuẩn hóa tăng <= 0.85 điểm % |
+| **Học máy cổ điển** | Cây quyết định (max_depth=6) | 93.73% | 0.8848 | Trực quan (Cây phân nhánh rõ ràng) | Dễ overfitting nếu không giới hạn độ sâu |
+| **Học máy cổ điển** | Support Vector Machine (RBF Kernel) | 90.86% | 0.8219 | Hộp đen ranh giới phi tuyến (7-Fold: 90.39%) | Khó giải thích trọng số |
+| **Học sâu (Buổi 12)** | Keras MLP (class_weight + EarlyStop) | 89.56% | 0.8450 | Hộp đen (Dừng tại Epoch 53, 3 seeds: 90.51% ± 0.25%) | Bác sĩ khó tin tưởng khi ra quyết định mổ |
 | **MÔ HÌNH XUẤT SẮC NHẤT** | **Random Forest Pipeline (200 cây)** | **95.04%** | **0.9043** | **Rất tốt (Gini Imp: ASTV, ALTV, MSTV)** | **Rất thấp: Recall Lớp 3 đạt 90.62% (29/32 ca)** |
 
 ---
 
-## 4. CHI TIẾT MA TRẬN NHẦM LẪN MÔ HÌNH RANDOM FOREST TRÊN TẬP TEST (383 MẪU)
+## 5. CHI TIẾT MA TRẬN NHẦM LẪN MÔ HÌNH RANDOM FOREST TRÊN TẬP TEST (383 MẪU)
 
 ```text
                Predicted Normal   Predicted Suspect   Predicted Pathologic
@@ -83,10 +94,23 @@ Actual Pathologic           1                 2                     29      ( 29
 * **7-Fold Stratified CV trên Train:** `94.25% ± 1.17%`.
 * **Macro-Precision:** `92.12%`, **Macro-Recall:** `89.02%`, **Macro-F1:** `90.43%`.
 * **ROC-AUC One-vs-Rest:** `0.9919` (Khả năng phân tách đa lớp ở mức xuất sắc).
+* **Độ hiệu chuẩn xác suất (Brier Score Loss):** Normal = `0.0278`, Suspect = `0.0338`, Pathologic = `0.0131` -> Mean Brier = `0.0249` (Tiệm cận 0, xác suất dự đoán cực kỳ tin cậy).
 
 ---
 
-## 5. HƯỚNG DẪN CÀI ĐẶT VÀ THỰC THI
+## 6. MINH HỌA TÍNH TAY NGÀY 7 (CÂU 6 - BUỔI 12)
+* **Nguồn dữ liệu:** Lấy chính xác từ ca bệnh số 1 tập Train (Row 0):
+  + ASTV đo: `59.0%` -> Chuẩn hóa $x_1 = 0.6894$
+  + ALTV đo: `0.0%` -> Chuẩn hóa $x_2 = -0.5429$
+  + Nhãn thực tế: $y = 1$ (Normal - index 0 trong 3 lớp).
+* **Forward Pass tầng ẩn (ReLU):** $z_1 = 0.0897 	o h_1 = 0.0897$; $z_2 = 0.2836 	o h_2 = 0.2836$.
+* **Softmax tầng ra:** $z_{out} = [0.203, 0.2732, 0.2791] 	o P = [0.3173, 0.3403, 0.3424]$.
+* **Categorical Cross-Entropy Loss:** $L = -\ln(P[0]) = 1.1480$.
+* **Backpropagation:** $\delta_{out} = P - y_{onehot} = [-0.6827, 0.3403, 0.3424]$. Cập nhật trọng số tầng ra $V_{new} = [[0.2061, 0.4969, 0.0969], [0.3194, 0.0903, 0.5903]]$.
+
+---
+
+## 7. HƯỚNG DẪN CÀI ĐẶT VÀ THỰC THI
 
 ### Cài đặt môi trường
 Khuyến nghị sử dụng Python 3.10 trở lên:
@@ -99,7 +123,7 @@ Mở bằng Jupyter Notebook, JupyterLab hoặc VS Code:
 ```bash
 jupyter notebook DT69_NguyenQuachPhuTai.ipynb
 ```
-Hoặc tải lên Google Colab và chạy toàn bộ từ đầu đến cuối (Runtime -> Run all). Toàn bộ 12 cells đã được chạy sẵn và lưu đầy đủ kết quả thật.
+Toàn bộ 12 cells đã được chạy sẵn và lưu đầy đủ kết quả thật 100%.
 
 ### Kiểm toán toàn diện đồ án
 Chạy file kiểm toán tự động để đối chiếu tất cả yêu cầu từ file Excel của giảng viên:
@@ -135,7 +159,7 @@ print("Kết quả chẩn đoán:", prediction[0])
 
 ---
 
-## 6. BẢN QUYỀN VÀ XÁC THỰC BÀI NÀY
+## 8. BẢN QUYỀN VÀ XÁC THỰC BÀI NÀY
 * Sinh viên cam kết toàn bộ nội dung trong bài nộp được thực hiện độc lập, nghiêm túc, bám sát từng dòng tham số trong file Excel đề tài của Khoa.
 * Các sản phẩm phục vụ bài thi trực tiếp tại lớp:
   + Giấy thi tính tay Ngày 7: Đã chuẩn bị sẵn đề cương tính tay Softmax 3 lớp + Cross-Entropy Loss + Gradient Descent cho mạng nơ-ron MLP với số liệu ca bệnh thật.
